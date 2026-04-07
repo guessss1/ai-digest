@@ -9,13 +9,21 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "digest": "tsx scripts/generate-digest.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.3",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
     "astro": "^6.1.1",
-    "sharp": "^0.34.3"
+    "sharp": "^0.34.3",
+    "@anthropic-ai/sdk": "^0.52.0",
+    "replicate": "^1.0.0",
+    "dotenv": "^16.4.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.0",
+    "@types/node": "^22.0.0"
   }
 }
