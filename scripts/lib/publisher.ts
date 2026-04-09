@@ -116,3 +116,25 @@ ${titles}
   // gh pr create выводит URL созданного PR
   return stdout.trim();
 }
+
+export async function ensureMasterBranch(): Promise<void> {
+  await execAsync('git fetch origin');
+  await execAsync('git checkout master');
+  await execAsync('git pull origin master');
+}
+
+export async function commitToMaster(
+  files: ArticleFile[],
+  date: string
+): Promise<void> {
+  // Добавляем файлы
+  await execAsync(`git add ${config.outputDir} ${config.assetsDir} ${config.dedupFile}`);
+
+  // Коммит
+  const articleCount = files.length;
+  const message = `feat(digest): add ${articleCount} articles for ${date}`;
+  await execAsync(`git commit -m "${message}"`);
+
+  // Пуш в master
+  await execAsync('git push origin master');
+}

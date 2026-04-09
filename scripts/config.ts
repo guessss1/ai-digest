@@ -20,6 +20,9 @@ export const config = {
   imageModel: 'black-forest-labs/flux-schnell',
   imageSize: { width: 1200, height: 630 },
 
+  // Автопубликация (true = коммит в master, false = создание PR)
+  autoPublish: true,
+
   // Пути
   outputDir: 'src/content/blog',
   assetsDir: 'src/assets/blog',

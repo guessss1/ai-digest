@@ -9,6 +9,8 @@ import {
   createBranch,
   commitAndPush,
   createPR,
+  ensureMasterBranch,
+  commitToMaster,
   type ArticleFile,
 } from './lib/publisher.js';
 
@@ -84,9 +86,15 @@ async function main(): Promise<void> {
     }
   }
 
-  // 6. Создать ветку
-  log(`Creating branch digest/${date}...`);
-  const branch = await createBranch(date);
+  // 6. Подготовка ветки
+  let branch: string | null = null;
+  if (config.autoPublish) {
+    log('Switching to master...');
+    await ensureMasterBranch();
+  } else {
+    log(`Creating branch digest/${date}...`);
+    branch = await createBranch(date);
+  }
 
   // 7. Записать файлы статей
   log('Writing article files...');
@@ -95,21 +103,29 @@ async function main(): Promise<void> {
     log(`  Written: ${filepath}`);
   }
 
-  // 8. Коммит и пуш
-  log('Committing and pushing...');
-  await commitAndPush(branch, articles, date);
+  // 8. Публикация
+  if (config.autoPublish) {
+    log('Committing to master...');
+    await commitToMaster(articles, date);
+    log('Published to master');
+  } else {
+    log('Committing and pushing...');
+    await commitAndPush(branch!, articles, date);
 
-  // 9. Создать PR
-  log('Creating PR...');
-  const prUrl = await createPR(branch, date, articles);
-  log(`PR created: ${prUrl}`);
+    log('Creating PR...');
+    const prUrl = await createPR(branch!, date, articles);
+    log(`PR created: ${prUrl}`);
+    console.log(`\n✅ Created PR with ${articles.length} articles: ${prUrl}`);
+  }
 
-  // 10. Обновить кэш дедупликации
+  // 9. Обновить кэш дедупликации
   await markAsPublished(selected.map((n) => n.url));
   log('Deduplication cache updated');
 
   log('Done!');
-  console.log(`\n✅ Created PR with ${articles.length} articles: ${prUrl}`);
+  if (config.autoPublish) {
+    console.log(`\n✅ Published ${articles.length} articles to master`);
+  }
 }
 
 main().catch((error) => {
