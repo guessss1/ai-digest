@@ -40,9 +40,11 @@ astro.config.mjs                 — Tailwind integration
 package.json                     — Tailwind dependency
 ```
 
+**Do NOT touch:** `src/content/blog/*` (существующие статьи), `scripts/*` (digest pipeline), `src/content.config.ts` (content schema).
+
 ---
 
-## Chunk 1: Tag System
+## Модуль 1: Tag System
 
 ### Task 1: TagList component
 
@@ -117,8 +119,13 @@ Add `tags` to destructured props, import TagList, render after title.
 
 - [ ] **Step 2: Verify locally**
 
-Run: `npm run dev`
-Check post pages show tags.
+```bash
+npm run dev
+```
+
+Open http://localhost:4321/blog/[any-post]/
+
+Expected: Tags display as clickable pills below the post title.
 
 - [ ] **Step 3: Commit**
 
@@ -215,7 +222,14 @@ const sortedTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
 
 - [ ] **Step 5: Verify locally**
 
-Navigate: `/tags/`, `/tags/llm/`
+```bash
+npm run dev
+```
+
+Navigate to:
+- http://localhost:4321/tags/ — Expected: Tag cloud with counts
+- http://localhost:4321/tags/llm/ — Expected: Filtered list of posts with tag "llm"
+- Header — Expected: "Tags" link visible in navigation
 
 - [ ] **Step 6: Commit**
 
@@ -226,7 +240,7 @@ git commit -m "feat(tags): add tag pages and navigation"
 
 ---
 
-## Chunk 2: Blog Features
+## Модуль 2: Blog Features
 
 ### Task 5: Reading time
 
@@ -310,7 +324,7 @@ git commit -m "feat(i18n): Russian date formatting and html lang"
 
 ---
 
-## Chunk 3: Tailwind Design (Optional)
+## Модуль 3: Tailwind Design (Optional)
 
 ### Task 8: Install Tailwind
 
@@ -348,7 +362,7 @@ git commit -m "feat(design): modern dark theme"
 
 ---
 
-## Chunk 4: Deployment
+## Модуль 4: Deployment
 
 ### Task 10: Vercel setup
 
@@ -365,6 +379,13 @@ npx astro add vercel
 ```bash
 npm run build
 ```
+
+Expected output ends with:
+```
+✓ Completed in X.XXs.
+```
+
+No errors or warnings about missing adapter.
 
 - [ ] **Step 4: Deploy**
 
@@ -383,11 +404,52 @@ git commit -m "feat(deploy): configure Vercel"
 
 ## Execution Order
 
-| Chunk | Tasks | Priority |
-|-------|-------|----------|
-| 1 | 1–4 | High — tag navigation |
-| 2 | 5–7 | Medium — blog UX |
-| 3 | 8–9 | Low — visual polish |
-| 4 | 10 | Medium — go live |
+**Порядок выполнения:**
 
-Chunk 1 + 2 можно сделать без Tailwind. Chunk 3 опционален.
+```
+(1 + 4) → 2 → 3 (optional)
+```
+
+- **Модули 1 и 4** — параллельно (не пересекаются по файлам)
+- **Модуль 2** — после 1 (оба модифицируют `BlogPost.astro`)
+- **Модуль 3** — опционален, выполняется последним (переделывает стили из 1 и 2)
+
+| Модуль | Tasks | Зависит от |
+|--------|-------|------------|
+| 1 (Tags) | 1–4 | — |
+| 4 (Deploy) | 10 | — |
+| 2 (Blog Features) | 5–7 | 1 |
+| 3 (Tailwind) | 8–9 | 1, 2 |
+
+---
+
+## Verification
+
+После выполнения всех модулей проверить:
+
+1. **Build passes**
+   ```bash
+   npm run build
+   ```
+   Expected: No errors, `dist/` folder created.
+
+2. **Tag system works**
+   - `/tags/` shows tag cloud with correct counts
+   - `/tags/[tag]/` shows filtered posts
+   - Tags on post pages link to tag pages
+
+3. **Blog features work**
+   - Reading time displays on post pages
+   - Related posts section shows 0–3 relevant posts
+   - Dates formatted in Russian (e.g., "25 марта 2026")
+
+4. **No regressions**
+   - Existing blog posts render correctly
+   - RSS feed still works: `/rss.xml`
+   - Homepage lists latest posts
+
+5. **Files untouched**
+   ```bash
+   git diff --name-only scripts/ src/content/blog/ src/content.config.ts
+   ```
+   Expected: No output (these files should not be modified).
