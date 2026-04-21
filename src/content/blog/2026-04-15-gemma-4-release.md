@@ -4,6 +4,7 @@ description: 'Gemma 4 вышла 2 апреля в четырёх размера
 pubDate: '2026-04-15'
 tags: ['google', 'gemma', 'open-source']
 source: 'https://blog.google/technology/developers/gemma-4/'
+heroImage: './2026-04-15-gemma-4-release.webp'
 ---
 
 2 апреля Google выложил Gemma 4 — четвёртое поколение своей семейки открытых моделей под Apache 2.0. Линейка состоит из четырёх размеров: Effective 2B и Effective 4B для устройств, 26B MoE для потребительских GPU и 31B Dense для серверов. «Effective» в E2B/E4B значит, что модель реально активирует меньше параметров, чем весит — это важно для памяти на телефоне.

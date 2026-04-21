@@ -4,6 +4,7 @@ description: 'Отчёт Faros AI по телеметрии 22 тысяч раз
 pubDate: '2026-04-15'
 tags: ['ai', 'разработка', 'исследование']
 source: 'https://www.faros.ai/research/ai-acceleration-whiplash'
+heroImage: './2026-04-15-faros-engineering-report.webp'
 ---
 
 Faros AI опубликовал Engineering Report 2026 по телеметрии 22 тысяч разработчиков из 4 тысяч команд за два года. Картина противоречивая: AI-ассистенты разгоняют производство кода, но ломают процесс ревью. Отчёт называют «AI Acceleration Whiplash» — ускорение с откатом, где прирост скорости наверху компенсируется потерями ниже по потоку.
