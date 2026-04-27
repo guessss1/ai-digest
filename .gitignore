@@ -25,8 +25,7 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-# Claude — версионируем проектные rules/agents/hooks, приватные и временные артефакты остаются локальными
-.claude/settings.json
+# Claude — версионируем проектные rules/agents/hooks/settings, приватные и временные артефакты остаются локальными
 .claude/settings.local.json
 .claude/*.local
 .claude/handoff/
@@ -34,6 +33,9 @@ pnpm-debug.log*
 .claude/projects/
 .claude/skills/
 tmpclaude-*
+
+# Логи пайплайна harness
+logs/
 
 .vercel
 .mcp.json
