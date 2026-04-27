@@ -21,4 +21,13 @@ for PATTERN in "rm -rf" "sudo" "chmod 777" \
   fi
 done
 
+# Блок прямого push в защищённые ветки master/main.
+# Разрешён push в feature/* (для /digest пайплайна).
+if echo "$CMD" | grep -qE 'git[[:space:]]+push.*\b(master|main)\b'; then
+  if ! echo "$CMD" | grep -q 'feature/'; then
+    echo "Blocked: direct push to master/main. Use feature/* branch and PR." >&2
+    exit 2
+  fi
+fi
+
 exit 0
